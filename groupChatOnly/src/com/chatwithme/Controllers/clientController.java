@@ -24,7 +24,9 @@ public class clientController {
 
     public void initialize() throws IOException {
 
-        localSocket = new Socket();
+
+
+        /*localSocket = new Socket();
         InetAddress inetAddress=InetAddress.getByName("localhost");
         //the port should be greater or equal to 0, else it will throw an error
         int port=6000;
@@ -43,15 +45,17 @@ public class clientController {
         inputStream = new DataInputStream(localSocket.getInputStream());
 
         Timer timer = new Timer();
-        timer.schedule(new ListenerThread(inputStream,"server", msgPane,timer),1000,2000);
+        timer.schedule(new ListenerThread(inputStream,"server", msgPane,timer),1000,2000);*/
     }
 
     public void sendMsg(ActionEvent actionEvent) throws IOException {
-        String msg = msgField.getText();
-        msgPane.appendText("\nMe : " + msg);
-        outputStream.writeUTF(msg);
-        outputStream.flush();
-        msgField.clear();
+        Socket localSocket1 = new Socket("localhost",8000);
+        Socket localSocket2 = new Socket("localhost",8000);
+        Socket localSocket3 = new Socket("localhost",8000);
+        Socket localSocket4 = new Socket("localhost",8000);
+        Socket localSocket5 = new Socket("localhost",8000);
+        Socket localSocket6 = new Socket("localhost",8000);
+
     }
 
     public void clear(ActionEvent actionEvent) {

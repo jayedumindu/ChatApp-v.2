@@ -1,6 +1,8 @@
 package com.chatwithme.Controllers;
 
 import com.chatwithme.Thread.ListenerThread;
+import com.chatwithme.Thread.ServerListener;
+import com.chatwithme.util.Server;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,29 +24,24 @@ public class serverController {
     @FXML
     public JFXTextField clientName;
 
+    Server server;
+    Timer timer;
+
     DataOutputStream outputStream;
     DataInputStream inputStream;
     Socket localSocket;
     ArrayList<Integer> serverSockets = new ArrayList<>();
 
     public void initialize() throws IOException {
-       /* // setting up the server
-        System.out.println("server up and running!");
-        int PORT = 8000;
-        serverSocket  = new ServerSocket(PORT).;
-        // wait for an connection to be established --> binds it to a local socket --> returns the remote socket
-        Thread serverWaitingThread = new Thread(() -> {
-            try {
-                localSocket = serverSocket.accept();
-                System.out.println("connection succeeded!");
 
-                outputStream = new DataOutputStream(localSocket.getOutputStream());
-                inputStream = new DataInputStream(localSocket.getInputStream());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-        serverWaitingThread.start();*/
+        timer = new Timer();
+
+        // open up the server
+        server = new Server(8000,5);
+
+        // starts listening to client requests
+        timer.schedule(new ServerListener(server),1000, 2000);
+
     }
 
 /*    public void sendMsg(ActionEvent actionEvent) throws IOException {
@@ -60,14 +57,39 @@ public class serverController {
     }*/
 
     public void openUpClient(ActionEvent actionEvent) throws IOException {
+
+        Thread serverWaitingThread = new Thread(() -> {
+            try {
+                ServerSocket serverSocket = new ServerSocket(8000,5);
+                serverSocket.accept();
+                System.out.println("accepted client 1");
+                serverSocket.accept();
+                System.out.println("accepted client 2");
+                serverSocket.accept();
+                System.out.println("accepted client 3");
+                serverSocket.accept();
+                System.out.println("accepted client 4");
+                serverSocket.accept();
+                System.out.println("accepted client 5");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+        serverWaitingThread.start();
+
+
+
+
+
         Stage clientStage = new Stage();
-        Scene client = new Scene(FXMLLoader.load(this.getClass().getClassLoader().getResource("com/chatwithme/view/client.fxml")));
+        Scene client = new Scene(FXMLLoader.load(this.getClass().getClassLoader().getResource("com/chatwithme/FXML/client.fxml")));
         clientStage.setScene(client);
         clientStage.setTitle("Client App");
         clientStage.show();
 
         /*Timer timer = new Timer();
-        timer.schedule(new ListenerThread(inputStream,"client", msgPane,timer),1000, 2000);*/
+        */
     }
 
 }
