@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.text.Text;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -18,6 +19,7 @@ public class clientController {
     @FXML
     public JFXTextField msgField;
     public TextArea msgPane;
+    public Text username;
 
     // TODO : hv to encapsulate client
     Client client;
@@ -27,6 +29,8 @@ public class clientController {
 
 
     public void initialize() throws IOException {
+
+        username.setText("username : " + clientName);
 
         timer = new Timer();
 
@@ -39,7 +43,7 @@ public class clientController {
 
     public void sendMsg(ActionEvent actionEvent) throws IOException {
 
-        client.getOut().writeUTF(clientName + " : " + msgPane.getText());
+        client.getOut().writeUTF(clientName + " : " + msgField.getText());
 
     }
 

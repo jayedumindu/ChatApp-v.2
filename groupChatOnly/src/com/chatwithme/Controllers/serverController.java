@@ -65,7 +65,6 @@ public class serverController {
 
         // passing data via the controller
         controller.initData(clientName.getText());
-
     }
 
 }

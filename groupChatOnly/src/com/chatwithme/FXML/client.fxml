@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="556.0" prefWidth="372.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.chatwithme.Controllers.clientController">
    <children>
-      <TextArea fx:id="msgPane" editable="false" layoutX="28.0" layoutY="34.0" prefHeight="375.0" prefWidth="310.0" />
+      <TextArea fx:id="msgPane" editable="false" layoutX="31.0" layoutY="59.0" prefHeight="375.0" prefWidth="310.0" />
       <JFXTextField fx:id="msgField" alignment="CENTER" layoutX="59.0" layoutY="446.0" prefHeight="25.0" prefWidth="170.0" promptText="enter message" />
       <Button layoutX="251.0" layoutY="446.0" mnemonicParsing="false" onAction="#sendMsg" style="-fx-background-color: brown; -fx-text-fill: white;" text="SEND" />
       <JFXButton layoutX="128.0" layoutY="510.0" onAction="#clear" prefHeight="25.0" prefWidth="117.0" text="CLEAR">
@@ -18,9 +18,9 @@
             <Font name="System Italic" size="12.0" />
          </font>
       </JFXButton>
-      <Text layoutX="164.0" layoutY="20.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Client">
+      <Text fx:id="username" layoutX="105.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="162.13671875">
          <font>
-            <Font name="System Bold" size="16.0" />
+            <Font size="20.0" />
          </font>
       </Text>
    </children>
