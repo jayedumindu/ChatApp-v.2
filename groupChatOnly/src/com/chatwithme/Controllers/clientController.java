@@ -1,64 +1,53 @@
 package com.chatwithme.Controllers;
 
 import com.chatwithme.Thread.ListenerThread;
+import com.chatwithme.util.Client;
 import com.jfoenix.controls.JFXTextField;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.Timer;
 
 public class clientController {
+
+    @FXML
     public JFXTextField msgField;
     public TextArea msgPane;
 
-    DataOutputStream outputStream;
-    DataInputStream inputStream;
-    Socket localSocket;
+    // TODO : hv to encapsulate client
+    Client client;
+    String clientName;
+
+    private Timer timer;
+
 
     public void initialize() throws IOException {
 
+        timer = new Timer();
 
+        client = new Client(clientName,"localhost",8000);
 
-        /*localSocket = new Socket();
-        InetAddress inetAddress=InetAddress.getByName("localhost");
-        //the port should be greater or equal to 0, else it will throw an error
-        int port=6000;
-        //calling the constructor of the SocketAddress class
-        SocketAddress socketAddress=new InetSocketAddress(inetAddress, port);
-        //binding the  socket with the inetAddress and port number
-        localSocket.bind(socketAddress);
+        // TODO : open up a listener for server
+        timer.schedule(new ListenerThread(new DataInputStream(client.getInputStream()),msgPane),0,2000);
 
-        // address to the destination --> localhost:8000
-        SocketAddress destinationAddress =new InetSocketAddress(inetAddress, 8000);
-        localSocket.connect(destinationAddress);
-
-        System.out.println("Connected to : " + localSocket.getPort() + " from " + localSocket.getLocalAddress() + " port : " + localSocket.getLocalPort());
-
-        outputStream = new DataOutputStream(localSocket.getOutputStream());
-        inputStream = new DataInputStream(localSocket.getInputStream());
-
-        Timer timer = new Timer();
-        timer.schedule(new ListenerThread(inputStream,"server", msgPane,timer),1000,2000);*/
     }
 
     public void sendMsg(ActionEvent actionEvent) throws IOException {
-        Socket localSocket1 = new Socket("localhost",8000);
-        Socket localSocket2 = new Socket("localhost",8000);
-        Socket localSocket3 = new Socket("localhost",8000);
-        Socket localSocket4 = new Socket("localhost",8000);
-        Socket localSocket5 = new Socket("localhost",8000);
-        Socket localSocket6 = new Socket("localhost",8000);
+
+        client.getOut().writeUTF(clientName + " : " + msgPane.getText());
 
     }
 
     public void clear(ActionEvent actionEvent) {
         msgPane.clear();
+    }
+
+    public void initData(String name) {
+        this.clientName = name;
     }
 }
