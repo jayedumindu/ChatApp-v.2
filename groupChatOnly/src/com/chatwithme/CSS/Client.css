@@ -1,0 +1,65 @@
+/* importing fonts */
+/*@font-face {
+    font-family: Inter;
+    src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300&family=Rubik&display=swap');
+}*/
+
+.root {
+    -fx-background-color: #35465c;
+}
+
+.main-area {
+    -fx-background-color: #5181b8;
+}
+
+#msg-box {
+    -fx-background-color: transparent;
+}
+
+.custom_btn {
+    -fx-opacity: 0.3;
+    -fx-cursor: hand;
+}
+
+.custom_btn:hover {
+    -fx-opacity: 1;
+    -fx-border-color: antiquewhite;
+}
+
+.text-field {
+    -fx-font-family: Cambria;
+    -fx-font-weight: 100pt;
+    -fx-text-fill: #e2e2e2;
+    -fx-font-size: 24px;
+}
+
+
+/* customizing the msg labels */
+
+.label {
+    -fx-background-radius: 5pt;
+    -fx-font-family: "Roboto Light";
+    -fx-font-size: 15px;
+    -fx-background-color: whitesmoke;
+    -fx-text-fill: #333333;
+    -fx-padding: 10pt;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+    -fx-wrap-text: true;
+}
+
+/*
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+*/
+
+.scroll-pane {
+    -fx-background: transparent;
+    -fx-background-image: url(../CSS/img/client-background.jpg);
+    -fx-fit-to-width: true;
+}
+
+.scroll-bar:horizontal, .scroll-bar:vertical{
+    -fx-background-color: transparent;
+}

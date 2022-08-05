@@ -1,6 +1,9 @@
 package com.chatwithme.Thread;
 
+import javafx.application.Platform;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -10,10 +13,10 @@ import java.util.TimerTask;
 public class ListenerThread extends TimerTask {
 
     DataInputStream in;
-    TextArea msgArea;
+    VBox msgArea;
     Timer timer;
 
-    public ListenerThread(DataInputStream inputStream,TextArea msgArea){
+    public ListenerThread(DataInputStream inputStream,VBox msgArea){
         in = inputStream;
         this.msgArea = msgArea;
         timer = new Timer();
@@ -25,7 +28,13 @@ public class ListenerThread extends TimerTask {
             try {
                 if(in.available()>0){
                     String msg = in.readUTF();
-                    msgArea.appendText("\n"+msg);
+                    // creating a label to add
+                    Label msgLbl = new Label(msg);
+                    System.out.println(msg);
+                    Platform.runLater(() -> {
+                        msgArea.getChildren().add(msgLbl);
+                    });
+
                    /* if(msg.equals("over")){
                         msgArea.appendText("\nExiting.........");
                         timer.cancel();
