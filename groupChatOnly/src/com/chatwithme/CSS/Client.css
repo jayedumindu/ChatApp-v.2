@@ -14,6 +14,7 @@
 
 #msg-box {
     -fx-background-color: transparent;
+    -fx-fit-to-height: false;
 }
 
 .custom_btn {
@@ -23,7 +24,6 @@
 
 .custom_btn:hover {
     -fx-opacity: 1;
-    -fx-border-color: antiquewhite;
 }
 
 .text-field {
@@ -58,6 +58,7 @@
     -fx-background: transparent;
     -fx-background-image: url(../CSS/img/client-background.jpg);
     -fx-fit-to-width: true;
+    -fx-opacity: 0.8;
 }
 
 .scroll-bar:horizontal, .scroll-bar:vertical{

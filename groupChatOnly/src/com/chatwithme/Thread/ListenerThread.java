@@ -2,7 +2,6 @@ package com.chatwithme.Thread;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 
 import java.io.DataInputStream;

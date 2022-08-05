@@ -27,9 +27,9 @@
       </Pane>
       <Pane prefHeight="585.0" prefWidth="564.0" styleClass="main-area">
          <children>
-            <ScrollPane id="scroll-pane" layoutX="52.0" prefHeight="585.0" prefWidth="460.0">
+            <ScrollPane id="scroll-pane" fx:id="scrollPane" layoutX="52.0" prefHeight="585.0" prefWidth="460.0">
                <content>
-                  <VBox id="msg-box" fx:id="msgBox" prefHeight="585.0" prefWidth="460.0" />
+                  <VBox id="msg-box" fx:id="msgBox" />
                </content>
             </ScrollPane>
          </children>

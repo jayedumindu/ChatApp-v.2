@@ -6,9 +6,9 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -18,8 +18,8 @@ public class clientController {
 
     @FXML
     public JFXTextField msgField;
-    public Text username;
     public VBox msgBox;
+    public ScrollPane scrollPane;
 
     // TODO : hv to encapsulate client
     Client client;
@@ -31,7 +31,8 @@ public class clientController {
     public void initialize() throws IOException {
 
         Platform.runLater(() -> {
-           /* username.setText("username : " + clientName);*/
+           // add a listener for scrollbar to be at the end
+            msgBox.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
         });
 
         timer = new Timer();
