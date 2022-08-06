@@ -2,8 +2,12 @@ package com.chatwithme.Thread;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Timer;
@@ -33,6 +37,14 @@ public class ListenerThread extends TimerTask {
                     Platform.runLater(() -> {
                         msgArea.getChildren().add(msgLbl);
                     });
+                    /*System.out.println("something  came here!");
+
+                    // implementing image reading
+                    BufferedImage img = ImageIO.read(in);
+
+                    ImageView view = new ImageView();*/
+
+                    //view.setImage(img);
 
                    /* if(msg.equals("over")){
                         msgArea.appendText("\nExiting.........");

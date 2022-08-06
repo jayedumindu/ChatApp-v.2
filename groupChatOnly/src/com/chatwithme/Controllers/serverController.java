@@ -61,6 +61,7 @@ public class serverController {
         clientController controller = loader.getController();
         clientStage.setScene(client);
         clientStage.setTitle("Client App");
+        //clientStage.setResizable(false);
 
         // passing data via the controller
         try {

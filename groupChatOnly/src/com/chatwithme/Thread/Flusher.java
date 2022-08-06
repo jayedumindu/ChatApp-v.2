@@ -1,11 +1,13 @@
 package com.chatwithme.Thread;
 
-import com.chatwithme.Controllers.serverController;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.TimerTask;
+
+import com.chatwithme.Controllers.serverController;
+import org.apache.commons.io.IOUtils;
+
+import javax.imageio.ImageIO;
 
 public class Flusher extends TimerTask {
 
@@ -21,10 +23,21 @@ public class Flusher extends TimerTask {
     public void run() {
         try {
             if(inputStream.available()>0){
-                String msg = inputStream.readUTF();
-                // flush to all output-streams
-                for (DataOutputStream out: serverController.clients) {
+
+                // analyzing the first byte
+                if(inputStream.readByte()==-1){
+                    // waiting for an image
+                    byte[] bytes = new byte[10000000];
+                    inputStream.read(bytes);
+                    ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                    BufferedImage bImage2 = ImageIO.read(bis);
+                    ImageIO.write(bImage2, "jpg", new File("output.jpg") );
+                }else {
+                   String msg = inputStream.readUTF();
+                    // flush to all output-streams
+                    for (DataOutputStream out: serverController.clients) {
                     out.writeUTF(msg);
+                    }
                 }
             }
         } catch (IOException e) {
