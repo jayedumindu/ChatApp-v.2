@@ -6,21 +6,24 @@ import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Timer;
+
 
 public class clientController {
 
@@ -33,11 +36,13 @@ public class clientController {
     // TODO : hv to encapsulate client
     Client client;
     String clientName;
+    ListenerThread listener;
 
     // file handling
     FileChooser fileChooser;
 
-    private Timer timer;
+    // header-payload
+    byte[] head;
 
 
     public void initialize() throws IOException {
@@ -47,53 +52,88 @@ public class clientController {
             msgBox.heightProperty().addListener(observable -> scrollPane.setVvalue(1D));
         });
 
-        timer = new Timer();
+        client = new Client(clientName,"localhost",8080);
+
+        Timer timer = new Timer();
         fileChooser = new FileChooser();
 
-        client = new Client(clientName,"localhost",8000);
-
         // TODO : open up a listener for server
-        timer.schedule(new ListenerThread(new DataInputStream(client.getInputStream()),msgBox),0,1000);
+        try {
+            listener = new ListenerThread(new DataInputStream(client.getInputStream()),msgBox,timer);
+            timer.schedule(listener,0,1000);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void sendMsg(MouseEvent actionEvent) throws IOException {
+    private void reConnect() throws IOException {
+        client = new Client(clientName,"localhost",8080);
+    }
 
-        byte e = 0;
-        client.getOut().write(e);
-
-        client.getOut().writeUTF(clientName + " :\n" + msgField.getText());
-
+    public void sendMsg(String msg) throws IOException, InterruptedException {
+        // removing client from the list
+        serverController.clients.remove(client.getLocalPort());
+        client.getOut().writeUTF(msg);
+        client.getOut().flush();
+        client.getOut().close();
+        listener.stop();
+        // displaying
+        Label msgLbl = new Label(msg);
+        System.out.println(msg);
+        Platform.runLater(() -> {
+            msgBox.getChildren().add(msgLbl);
+        });
+        reConnect();
     }
 
     public void clear(ActionEvent actionEvent) throws IOException {
-        byte e = 0;
-        client.getOut().write(e);
     }
 
     public void initData(String name) {
         this.clientName = name;
     }
 
+    // TODO : pass the file type before sending file
     public void uploadPhoto(MouseEvent mouseEvent) throws IOException {
+
         File selectedFile = fileChooser.showOpenDialog(mainPane.getScene().getWindow());
-        // file path
-        String filename = selectedFile.getName();
-        String ext = filename.substring(filename.lastIndexOf(".")+1);
-        System.out.println(filename);
 
-        // write img-meta-data before sending image data
-        byte e = -1;
-        client.getOut().write(e);
+        if (selectedFile!=null) {
+            // file path
+            String filename = selectedFile.getName();
+            String ext = filename.substring(filename.lastIndexOf(".") + 1);
 
-        BufferedImage finalImage  = ImageIO.read(selectedFile);
-        //BufferedImage finalImage  = new BufferedImage(image.getWidth(null),image.getHeight(null),BufferedImage.TYPE_INT_ARGB);
+            // write img-meta-data before sending image data
+            //client.getOut().write(-1);
 
-        ByteArrayOutputStream bout = new ByteArrayOutputStream();
-        ImageIO.write(finalImage,ext,bout);
-        client.getOut().write(bout.toByteArray());
-        client.getOut().flush();
-        bout.flush();
-        bout.reset();
+            // passing the file type
+            client.getOut().writeUTF(ext);
+
+            BufferedImage finalImage = ImageIO.read(selectedFile);
+
+            ByteArrayOutputStream bout = new ByteArrayOutputStream();
+            ImageIO.write(finalImage, ext, bout);
+
+            client.getOut().write(bout.toByteArray());
+            client.getOut().flush();
+
+            // getting ready for the next round
+            bout.flush();
+            bout.reset();
+        }
+
+    }
+
+    public void sendOnKeyPressed(KeyEvent keyEvent) throws IOException, InterruptedException {
+        if(keyEvent.getCode().equals(KeyCode.ENTER)){
+            sendMsg(msgField.getText());
+            msgField.clear();
+        }
+    }
+
+    public void sendOnMousePressed(MouseEvent mouseEvent) throws IOException, InterruptedException {
+        sendMsg(msgField.getText());
+        msgField.clear();
     }
 }
