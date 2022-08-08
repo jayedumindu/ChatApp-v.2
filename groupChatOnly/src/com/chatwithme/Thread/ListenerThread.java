@@ -1,8 +1,10 @@
 package com.chatwithme.Thread;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
@@ -13,6 +15,8 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -30,60 +34,50 @@ public class ListenerThread extends TimerTask {
 
     @Override
     public void run() {
-        // listens for other parties to communicate --> infinite loop
+
             try {
                 if(in.available()>0){
 
-                    String msg = in.readUTF();
-                    // creating a label to add
-                    Label msgLbl = new Label(msg);
-                    System.out.println(msg);
-                    Platform.runLater(() -> {
-                                msgArea.getChildren().add(msgLbl);
-                            });
+                    if (in.readByte()==0){
+                        byte[] header = new byte[4];
+                        in.read(header);
 
-//                    String fileType = in.readUTF();
-//                    System.out.println();
-                    /*System.out.println("something came!");
-                    byte[] bytes = new byte[10000000];
-                    in.read(bytes);*/
+                        ByteBuffer buffer = ByteBuffer.wrap(header);
+                        int len = buffer.getInt();
 
-                    /*ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                    BufferedImage bImage2 = ImageIO.read(bis);
-                    try {
-                        ImageIO.write(bImage2, "png", new File("output.png") );
-                    } catch (Exception e) {
-                        Platform.runLater(() -> {
-                            new Alert(Alert.AlertType.ERROR,"file write was not successful : " + e).showAndWait();
-                        });
-                    }*/
+                        byte[] payload = new byte[len];
+                        in.read(payload);
+                        String msg = new String(payload, StandardCharsets.UTF_16);
 
 
-                    /*if(in.readByte()==-1){
-                        String fileType = in.readUTF();
-                        System.out.println();
-
-                        byte[] bytes = new byte[10000000];
-                        in.read(bytes);
-
-                        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
-                        BufferedImage bImage2 = ImageIO.read(bis);
-                        try {
-                            ImageIO.write(bImage2, fileType, new File("output.jpg") );
-                        } catch (Exception e) {
-                            Platform.runLater(() -> {
-                                new Alert(Alert.AlertType.ERROR,"file write was not successful : " + e).showAndWait();
-                            });
-                        }
-                    }else {
-                        String msg = in.readUTF();
-                        // creating a label to add
                         Label msgLbl = new Label(msg);
                         System.out.println(msg);
                         Platform.runLater(() -> {
                             msgArea.getChildren().add(msgLbl);
                         });
-                    }*/
+                    }else {
+                        byte[] header = new byte[4];
+                        in.read(header);
+
+                        ByteBuffer buffer = ByteBuffer.wrap(header);
+                        int len = buffer.getInt();
+
+                        byte[] payload = new byte[len];
+                        in.read(payload);
+
+                        ByteArrayInputStream bis = new ByteArrayInputStream(payload);
+                        BufferedImage imageData = ImageIO.read(bis);
+
+                        Image image = SwingFXUtils.toFXImage(imageData,null);
+                        ImageView view = new ImageView(image);
+                        view.setFitHeight(250);
+                        view.setFitWidth(250);
+                        view.setSmooth(true);
+                        view.setPreserveRatio(true);
+                        Platform.runLater(() -> {
+                            msgArea.getChildren().add(view);
+                        });
+                    }
 
                 }
             } catch (IOException e) {

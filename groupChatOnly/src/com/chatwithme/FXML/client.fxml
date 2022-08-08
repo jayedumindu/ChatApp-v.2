@@ -17,7 +17,7 @@
                   <Image url="@../CSS/img/send.png" />
                </image>
             </ImageView>
-            <JFXTextField fx:id="msgField" focusColor="#ffffff00" layoutX="73.0" layoutY="6.0" onKeyReleased="#sendOnKeyPressed" prefHeight="30.0" prefWidth="419.0" unFocusColor="#ffffff00" />
+            <JFXTextField fx:id="msgField" focusColor="#ffffff00" layoutX="73.0" layoutY="6.0" onKeyReleased="#sendOnEnter" prefHeight="30.0" prefWidth="419.0" unFocusColor="#ffffff00" />
             <ImageView fx:id="uploadBtn" fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="14.0" onMouseReleased="#uploadPhoto" preserveRatio="true" styleClass="custom_btn">
                <image>
                   <Image url="@../CSS/img/attach.png" />

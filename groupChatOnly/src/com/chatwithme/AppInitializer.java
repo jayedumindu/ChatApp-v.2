@@ -1,5 +1,6 @@
 package com.chatwithme;
 
+import com.chatwithme.Controllers.serverController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,10 +17,18 @@ public class AppInitializer extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Scene server = new Scene(FXMLLoader.load(this.getClass().getClassLoader().getResource("com/chatwithme/FXMl/server.fxml")));
+        FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("com/chatwithme/FXML/server.fxml"));
+        Scene server = new Scene(loader.load());
         primaryStage.setScene(server);
         primaryStage.setTitle("Server App");
         primaryStage.centerOnScreen();
+        // passing data via the controller
+        try {
+            serverController controller = loader.getController();
+            controller.initData(primaryStage);
+        }catch (NullPointerException e){
+            System.out.println(e);
+        }
         primaryStage.show();
 
     }

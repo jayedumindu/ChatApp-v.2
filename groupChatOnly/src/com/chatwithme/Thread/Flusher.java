@@ -1,111 +1,75 @@
 package com.chatwithme.Thread;
 
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.util.TimerTask;
-
 import com.chatwithme.Controllers.serverController;
-import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 
-import javax.imageio.ImageIO;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Flusher extends TimerTask {
 
     // TODO : listen for all incoming data and flush the traffic to each of the clients
 
     DataInputStream inputStream;
+    Timer timer;
 
-    public Flusher(DataInputStream inputStream) {
+    public Flusher(DataInputStream inputStream, Timer timer) {
         this.inputStream = inputStream;
+        this.timer = timer;
     }
 
     @Override
     public void run() {
+        /*System.out.println("server listening");*/
         try {
             if(inputStream.available()>0){
 
                 // TODO : just flush the incoming stream
 
-                // temporary buffer
-                //byte[] payload = IOUtils.toByteArray(inputStream);
-                /*byte[] arr = new byte[2048];
-                inputStream.read(arr);
+                stop();
 
-                for (DataOutputStream out : serverController.clients) {
-                    out.write(arr);
-                    out.flush();
-                }*/
-
-                //String fileType = inputStream.readUTF();
-                //System.out.println(fileType);
-                // waiting for an image
-                /*System.out.println("something came - server");
-                byte[] bytes = new byte[10000000];
-                inputStream.read(bytes);*/
-                byte[] payload = IOUtils.toByteArray(inputStream);
-                for (DataOutputStream out: serverController.clients.values()) {
-                    out.write(payload);
-                    out.flush();
-                }
-                //ByteArrayOutputStream output = new ByteArrayOutputStream();
-
-                //IOUtils.copy(inputStream,output);
-                /*byte[] dump = new byte[2048];
-                byte conf = 0;
-                do {
-                     conf = inputStream.readByte();
-                     //dump.a
-                }while(conf!=-1);
-
-                for (DataOutputStream out: serverController.clients) {
-                    out.write(dump);
-                    out.flush();
-                }*/
-
-               /* int len = inputStream.readByte();
-                System.out.println(len);
-                if(len>7) {
-
-                    byte[] dataArray = new byte[len];
-                    *//* for (int index = 0; index<len; index++){
-                        dataArray[index] = inputStream.readFully();
-                    }*//*
-                    inputStream.readFully(dataArray);
-                    for (DataOutputStream out : serverController.clients) {
-                        out.write(dataArray);
-                        out.flush();
-                    }
-                }*/
-
-
-
-                // analyzing the first byte
-                /*if(inputStream.readByte()==-1){
-                    String fileType = inputStream.readUTF();
-                    System.out.println(fileType);
-                    // waiting for an image
-                    byte[] bytes = new byte[10000000];
-                    inputStream.read(bytes);
-                    for (DataOutputStream out: serverController.clients) {
-                        out.write(-1);
-                        out.writeUTF(fileType);
-                        out.flush();
-                        out.write(bytes);
-                        out.flush();
-                    }
+                if (inputStream.readByte()==0){
+                    flush((byte) 0);
                 }else {
-                   String msg = inputStream.readUTF();
-                    // flush to all output-streams
-                    for (DataOutputStream out: serverController.clients) {
-                        out.write(0);
-                        out.writeUTF(msg);
-                    }
-                }*/
+                    flush((byte) -1);
+                }
+
+                resume();
+
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void flush(byte b) throws IOException {
+        byte[] header = new byte[4];
+        inputStream.read(header);
+
+        ByteBuffer buffer = ByteBuffer.wrap(header);
+        int len = buffer.getInt();
+
+        byte[] payload = new byte[len];
+        inputStream.read(payload);
+
+        for (OutputStream out: serverController.clients.values()) {
+            out.write(b);
+            out.write(ArrayUtils.addAll(header,payload));
+            out.flush();
+        }
+    }
+
+    private void stop() {
+        timer.cancel();
+        timer.purge();
+    }
+
+    private void resume() {
+        timer = new Timer();
+        timer.schedule(new Flusher(new DataInputStream(inputStream),timer),0,2000);
     }
 }
