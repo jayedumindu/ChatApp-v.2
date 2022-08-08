@@ -47,12 +47,6 @@
     -fx-wrap-text: true;
 }
 
-/*
-.scroll-pane > .viewport {
-    -fx-background-color: transparent;
-}
-*/
-
 .scroll-pane {
     -fx-background: transparent;
     -fx-background-image: url(../CSS/img/client-background.jpg);

@@ -2,18 +2,15 @@ package com.chatwithme.Thread;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
@@ -48,14 +45,13 @@ public class ListenerThread extends TimerTask {
                         byte[] payload = new byte[len];
                         in.read(payload);
                         String msg = new String(payload, StandardCharsets.UTF_16);
-
-
                         Label msgLbl = new Label(msg);
-                        System.out.println(msg);
                         Platform.runLater(() -> {
                             msgArea.getChildren().add(msgLbl);
                         });
+
                     }else {
+
                         byte[] header = new byte[4];
                         in.read(header);
 
@@ -77,6 +73,7 @@ public class ListenerThread extends TimerTask {
                         Platform.runLater(() -> {
                             msgArea.getChildren().add(view);
                         });
+
                     }
 
                 }

@@ -21,6 +21,8 @@ public class AppInitializer extends Application {
         Scene server = new Scene(loader.load());
         primaryStage.setScene(server);
         primaryStage.setTitle("Server App");
+        primaryStage.setResizable(false);
+        primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
         // passing data via the controller
         try {

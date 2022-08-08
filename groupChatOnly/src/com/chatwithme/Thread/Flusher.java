@@ -28,8 +28,6 @@ public class Flusher extends TimerTask {
         try {
             if(inputStream.available()>0){
 
-                // TODO : just flush the incoming stream
-
                 stop();
 
                 if (inputStream.readByte()==0){

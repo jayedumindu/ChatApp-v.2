@@ -4,9 +4,7 @@ import com.chatwithme.Thread.ListenerThread;
 import com.chatwithme.util.Client;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -81,7 +79,7 @@ public class clientController {
 
     public boolean sendMsg(String clientName) throws IOException, InterruptedException {
 
-        // TODO : bypass all the empty literals
+        // TODO : bypass all the empty spaces after and before
         if (!msgField.getText().equals("")){
             String msg = clientName + " :\n" + msgField.getText();
             payload = msg.getBytes(StandardCharsets.UTF_16);
@@ -100,8 +98,6 @@ public class clientController {
 
     }
 
-    public void clear(ActionEvent actionEvent) throws IOException {
-    }
 
     public void initData(String name, Stage stage) {
         this.stage = stage;
@@ -134,10 +130,6 @@ public class clientController {
             bout.flush();
             bout.reset();
         }
-
-    }
-
-    public void sendOnKeyPressed(KeyEvent keyEvent) throws IOException, InterruptedException {
 
     }
 

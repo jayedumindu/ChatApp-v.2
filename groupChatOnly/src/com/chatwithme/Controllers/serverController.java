@@ -15,7 +15,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Timer;
 
@@ -31,20 +30,17 @@ public class serverController {
 
     Socket localSocket;
     public static HashMap<Integer,DataOutputStream> clients = new HashMap<>();
-    //public static ArrayList<DataOutputStream> clients = new ArrayList<>();
 
     public void initialize() throws IOException {
 
         // open up the server
         server = new Server(8080, 5);
 
-        // TODO starts listening to client requests
         mainThread = new Thread(() -> {
             // always waits for a client's request
             while (true) {
                 try {
                     localSocket = server.accept();
-                    // TODO : have to listen on the input-stream
                     Timer timer = new Timer();
                     timer.schedule(new Flusher(new DataInputStream(localSocket.getInputStream()),timer),0,2000);
                     clients.put(localSocket.getPort(), new DataOutputStream(localSocket.getOutputStream()));
@@ -73,9 +69,9 @@ public class serverController {
         Scene client = new Scene(loader.load());
 
         clientStage.setScene(client);
-        clientStage.setTitle("Client App");
-        //clientStage.setResizable(false);
-
+        clientStage.setTitle("User : " + clientName.getText());
+        clientStage.setResizable(false);
+        clientStage.sizeToScene();
 
         // passing data via the controller
         try {
