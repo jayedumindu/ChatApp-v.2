@@ -6,6 +6,7 @@ import org.apache.commons.lang.ArrayUtils;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,7 +25,7 @@ public class Flusher extends TimerTask {
 
     @Override
     public void run() {
-        /*System.out.println("server listening");*/
+
         try {
             if(inputStream.available()>0){
 
@@ -49,14 +50,19 @@ public class Flusher extends TimerTask {
         inputStream.read(header);
 
         ByteBuffer buffer = ByteBuffer.wrap(header);
-        int len = buffer.getInt();
+        int pay_len = buffer.getInt();
 
-        byte[] payload = new byte[len];
+        byte[] payload = new byte[pay_len];
         inputStream.read(payload);
+
+        byte[] frame = new byte[pay_len + 4];
+        System.arraycopy(header, 0, frame, 0, 4);
+        System.arraycopy(payload, 0, frame, 4, pay_len);
+
 
         for (OutputStream out: serverController.clients.values()) {
             out.write(b);
-            out.write(ArrayUtils.addAll(header,payload));
+            out.write(frame);
             out.flush();
         }
     }

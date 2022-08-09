@@ -5,11 +5,14 @@ import com.chatwithme.util.Client;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -33,6 +36,7 @@ public class clientController {
     public VBox msgBox;
     public ScrollPane scrollPane;
     public AnchorPane mainPane;
+    public Pane emojiContainer;
 
     // TODO : hv to encapsulate client
     Client client;
@@ -46,6 +50,8 @@ public class clientController {
     // data handling
     byte[] payload;
     byte[] header;
+
+    int mouseCounter = 0;
 
 
     public void initialize() throws IOException {
@@ -145,5 +151,10 @@ public class clientController {
                 msgField.clear();
             }
         }
+    }
+
+    public void openUpEmojiMenu(MouseEvent mouseEvent) throws IOException {
+        mouseCounter++;
+        emojiContainer.setVisible(mouseCounter % 2 == 1);
     }
 }

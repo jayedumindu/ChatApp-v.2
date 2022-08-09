@@ -1,7 +1,7 @@
 /* importing fonts */
 @font-face {
-    font-family: Noto;
-    src: url('../Fonts/NotoEmoji-Regular.ttf');
+    font-family: 'Noto';
+    src: url('../Fonts/NotoColorEmoji.ttf');
 }
 
 .root {
@@ -27,7 +27,7 @@
 }
 
 .text-field {
-    -fx-font-family: 'Noto';
+    -fx-font-family: Noto;
     -fx-text-fill: #e2e2e2;
     -fx-font-size: 24px;
 }
@@ -37,7 +37,7 @@
 
 .label {
     -fx-background-radius: 5pt;
-    -fx-font-family: "Roboto Light";
+    -fx-font-family: Noto;
     -fx-font-size: 15px;
     -fx-background-color: whitesmoke;
     -fx-text-fill: #333333;
@@ -56,4 +56,17 @@
 
 .scroll-bar:horizontal, .scroll-bar:vertical{
     -fx-background-color: transparent;
+}
+
+/* emoji selector */
+
+#emoji-panel {
+    visibility: hidden;
+    -fx-background-color: #35465c;
+    -fx-border-radius: 10px;
+    -fx-opacity: 0.8;
+}
+
+.emoji:hover {
+    -fx-cursor: hand;
 }

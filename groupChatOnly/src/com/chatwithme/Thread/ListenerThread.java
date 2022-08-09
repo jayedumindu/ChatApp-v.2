@@ -35,6 +35,8 @@ public class ListenerThread extends TimerTask {
             try {
                 if(in.available()>0){
 
+                    stop();
+
                     if (in.readByte()==0){
                         byte[] header = new byte[4];
                         in.read(header);
@@ -58,6 +60,8 @@ public class ListenerThread extends TimerTask {
                         ByteBuffer buffer = ByteBuffer.wrap(header);
                         int len = buffer.getInt();
 
+                        System.out.println(len);
+
                         byte[] payload = new byte[len];
                         in.read(payload);
 
@@ -76,11 +80,18 @@ public class ListenerThread extends TimerTask {
 
                     }
 
+                    resume();
+
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
+    }
+
+    private void resume() {
+        Timer timer = new Timer();
+        timer.schedule(new ListenerThread(in,msgArea,timer),0,1000);
     }
 
     public void stop() {
