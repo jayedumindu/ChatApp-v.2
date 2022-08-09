@@ -118,10 +118,12 @@ public class clientController {
 
         if (selectedFile!=null) {
 
+            String[] res = selectedFile.getName().split("\\.");
+
             BufferedImage finalImage = ImageIO.read(selectedFile);
 
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
-            ImageIO.write(finalImage, "jpg", bout);
+            ImageIO.write(finalImage, res[1], bout);
 
             payload = bout.toByteArray();
             header = ByteBuffer.allocate(4).putInt(payload.length).array();
@@ -132,9 +134,6 @@ public class clientController {
             client.getOut().write(frame);
             client.getOut().flush();
 
-            // getting ready for the next round
-            bout.flush();
-            bout.reset();
         }
 
     }
