@@ -2,10 +2,11 @@ package com.chatwithme.Thread;
 
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -69,13 +70,22 @@ public class ListenerThread extends TimerTask {
                         BufferedImage imageData = ImageIO.read(bis);
 
                         Image image = SwingFXUtils.toFXImage(imageData,null);
+
+                        GridPane imagePane = new GridPane();
                         ImageView view = new ImageView(image);
+                        Label sender = new Label("sender : ");
+
+                        sender.getStyleClass().add("custom-label");
+                        imagePane.getStyleClass().add("custom-image");
+                        imagePane.add(view,0,1);
+                        imagePane.add(sender,0,0);
+
                         view.setFitHeight(250);
                         view.setFitWidth(250);
                         view.setSmooth(true);
                         view.setPreserveRatio(true);
                         Platform.runLater(() -> {
-                            msgArea.getChildren().add(view);
+                            msgArea.getChildren().add(imagePane);
                         });
 
                     }

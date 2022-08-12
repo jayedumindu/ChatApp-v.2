@@ -74,3 +74,17 @@
 .emoji:hover {
     -fx-cursor: hand;
 }
+
+.custom-image {
+    -fx-background-radius: 5pt;
+    -fx-background-color: whitesmoke;
+    -fx-padding: 10pt;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
+}
+
+.custom-label {
+    -fx-background-insets: 0px;
+    -fx-padding: 0pt;
+    -fx-fit-to-width: true;
+}
