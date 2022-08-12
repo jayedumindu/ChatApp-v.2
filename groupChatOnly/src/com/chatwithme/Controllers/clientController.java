@@ -5,9 +5,8 @@ import com.chatwithme.util.Client;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -20,10 +19,7 @@ import org.apache.commons.lang.ArrayUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Timer;
@@ -44,6 +40,10 @@ public class clientController {
     ListenerThread listener;
     Stage stage;
 
+    // meta-data
+    int localPort;
+    DataOutputStream localOutputStream;
+
     // file handling
     FileChooser fileChooser;
 
@@ -52,6 +52,7 @@ public class clientController {
     byte[] header;
 
     int mouseCounter = 0;
+
 
 
     public void initialize() throws IOException {
@@ -71,6 +72,9 @@ public class clientController {
     private void Connect() throws IOException {
         client = new Client(clientName,"localhost",8080);
 
+        localPort = client.getLocalPort();
+        localOutputStream = serverController.clients.get(localPort);
+
         Timer timer = new Timer();
         fileChooser = new FileChooser();
 
@@ -86,7 +90,8 @@ public class clientController {
     public boolean sendMsg(String clientName) throws IOException, InterruptedException {
 
         // TODO : bypass all the empty spaces after and before
-        if (!msgField.getText().equals("")){
+        if (!msgField.getText().trim().isEmpty()){
+
             String msg = clientName + " :\n" + msgField.getText();
             payload = msg.getBytes(StandardCharsets.UTF_16);
             int len = payload.length;
@@ -155,5 +160,24 @@ public class clientController {
     public void openUpEmojiMenu(MouseEvent mouseEvent) throws IOException {
         mouseCounter++;
         emojiContainer.setVisible(mouseCounter % 2 == 1);
+    }
+
+    public void copyEmojiToMsg(MouseEvent mouseEvent) {
+        ImageView emoji = (ImageView) mouseEvent.getSource();
+        String id = emoji.getId();
+        switch (id) {
+            case "smile" : msgField.appendText("\uD83D\uDE00"); break;
+            case "alien" : msgField.appendText("\uD83D\uDC7D"); break;
+            case "hand" : msgField.appendText("\u270B"); break;
+            case "smInPain" : msgField.appendText("\ud83d\ude08"); break;
+            case "heart" : msgField.appendText("\uD83D\uDC9D"); break;
+            case "party" : msgField.appendText("\uD83E\uDD73"); break;
+            case "angry" : msgField.appendText("\uD83D\uDE20"); break;
+            case "hot" : msgField.appendText("\uD83E\uDD75"); break;
+            case "neutral" : msgField.appendText("\uD83D\uDE10"); break;
+            case "poop" : msgField.appendText("\uD83D\uDCA9"); break;
+            case "broken" : msgField.appendText("\uD83D\uDC94"); break;
+            case "love" : msgField.appendText("\uD83D\uDE0D"); break;
+        }
     }
 }

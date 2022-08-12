@@ -65,9 +65,10 @@
 
 #emoji-panel {
     visibility: hidden;
+    -fx-background-radius: 5pt;
     -fx-background-color: #35465c;
     -fx-border-radius: 10px;
-    -fx-opacity: 0.8;
+    -fx-opacity: 0.9;
 }
 
 .emoji:hover {

@@ -39,62 +39,62 @@
             </ScrollPane>
             <Pane id="emoji-panel" fx:id="emojiContainer" layoutX="355.0" layoutY="333.0" prefHeight="248.0" prefWidth="204.0">
                <children>
-                  <ImageView layoutX="14.0" layoutY="14.0" styleClass="emoji">
+                  <ImageView fx:id="alien" layoutX="14.0" layoutY="14.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/alien.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="14.0" layoutY="76.0" styleClass="emoji">
+                  <ImageView fx:id="angry" layoutX="14.0" layoutY="76.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/angry.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="78.0" layoutY="193.0" styleClass="emoji">
+                  <ImageView fx:id="broken" layoutX="78.0" layoutY="193.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/broken.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="78.0" layoutY="76.0" styleClass="emoji">
+                  <ImageView fx:id="party" layoutX="78.0" layoutY="76.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/celebrate.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="78.0" layoutY="14.0" styleClass="emoji">
+                  <ImageView fx:id="hand" layoutX="78.0" layoutY="14.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/hand.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="142.0" layoutY="76.0" styleClass="emoji">
+                  <ImageView fx:id="heart" layoutX="142.0" layoutY="76.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/heart.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="14.0" layoutY="134.0" styleClass="emoji">
+                  <ImageView fx:id="hot" layoutX="14.0" layoutY="134.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/hot.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="14.0" layoutY="193.0" styleClass="emoji">
+                  <ImageView fx:id="smile" layoutX="14.0" layoutY="193.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/joy.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="142.0" layoutY="14.0" styleClass="emoji">
+                  <ImageView fx:id="smInPain" layoutX="142.0" layoutY="14.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/sinpain.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="142.0" layoutY="193.0" styleClass="emoji">
+                  <ImageView fx:id="love" layoutX="142.0" layoutY="193.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/wow.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="142.0" layoutY="134.0" styleClass="emoji">
+                  <ImageView fx:id="poop" layoutX="142.0" layoutY="134.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/poop.png" />
                      </image>
                   </ImageView>
-                  <ImageView layoutX="78.0" layoutY="134.0" styleClass="emoji">
+                  <ImageView fx:id="neutral" layoutX="78.0" layoutY="134.0" onMouseReleased="#copyEmojiToMsg" styleClass="emoji">
                      <image>
                         <Image url="@../CSS/img/emoji/neutral.png" />
                      </image>

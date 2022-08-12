@@ -1,12 +1,10 @@
 package com.chatwithme.Thread;
 
 import com.chatwithme.Controllers.serverController;
-import org.apache.commons.lang.ArrayUtils;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
