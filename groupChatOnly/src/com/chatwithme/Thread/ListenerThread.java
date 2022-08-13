@@ -83,10 +83,11 @@ public class ListenerThread extends TimerTask {
 
                         GridPane imagePane = new GridPane();
                         ImageView view = new ImageView(image);
-                        Label sender = new Label(new String(sender_payload,StandardCharsets.UTF_16));
+                        Label sender = new Label(new String(sender_payload,StandardCharsets.UTF_16).concat(" :"));
 
                         sender.getStyleClass().add("custom-label");
-                        imagePane.getStyleClass().add("custom-image");
+                        imagePane.getStyleClass().add("custom-image1");
+                        imagePane.setMaxWidth(300);
                         imagePane.add(view,0,1);
                         imagePane.add(sender,0,0);
 

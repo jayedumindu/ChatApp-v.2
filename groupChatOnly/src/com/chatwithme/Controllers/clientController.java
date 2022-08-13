@@ -4,15 +4,17 @@ import com.chatwithme.Thread.ListenerThread;
 import com.chatwithme.util.Client;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.lang.ArrayUtils;
@@ -108,6 +110,14 @@ public class clientController {
             client.getOut().write(frame);
             client.getOut().flush();
 
+            Label msgLabel = new Label(msgField.getText());
+            msgLabel.setStyle("-fx-background-color: #5181b8; -fx-text-fill: white");
+            HBox box = new HBox();
+            box.getChildren().add(msgLabel);
+            box.setAlignment(Pos.BASELINE_RIGHT);
+            msgBox.getChildren().add(box);
+
+
             return true;
         } else return false;
 
@@ -150,6 +160,28 @@ public class clientController {
             client.getOut().write(-1);
             client.getOut().write(frame);
             client.getOut().flush();
+
+            Image image = SwingFXUtils.toFXImage(finalImage,null);
+
+            HBox box = new HBox();
+
+            GridPane pane  = new GridPane();
+            pane.getStyleClass().add("custom-image2");
+            pane.setStyle("-fx-background-color: #5181b8;");
+
+            ImageView view = new ImageView(image);
+            view.setFitHeight(250);
+            view.setFitWidth(250);
+            view.setSmooth(true);
+            view.setPreserveRatio(true);
+
+            pane.getChildren().add(view);
+
+            box.setAlignment(Pos.BASELINE_RIGHT);
+            box.getChildren().add(pane);
+
+            msgBox.getChildren().add(box);
+
 
         }
 

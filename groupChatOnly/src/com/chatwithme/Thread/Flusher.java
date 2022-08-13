@@ -57,8 +57,6 @@ public class Flusher extends TimerTask {
         int pay_len;
         int sender_port;
 
-
-
         if(b==-1){
             // read two headers, get the length
             inputStream.read(temp_header);
@@ -97,14 +95,6 @@ public class Flusher extends TimerTask {
             System.arraycopy(header, 0, frame, 0, 4);
             System.arraycopy(payload, 0, frame, 4, pay_len);
         }
-
-
-
-
-
-
-
-
 
         for(Map.Entry<Integer, DataOutputStream> entry : serverController.clients.entrySet()) {
 

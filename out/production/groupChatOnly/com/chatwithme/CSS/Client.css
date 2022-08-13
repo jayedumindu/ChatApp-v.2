@@ -18,6 +18,7 @@
 #msg-box {
     -fx-background-color: transparent;
     -fx-fit-to-height: false;
+    -fx-fill-width: true;
 }
 
 .custom_btn {
@@ -75,7 +76,7 @@
     -fx-cursor: hand;
 }
 
-.custom-image {
+.custom-image1, .custom-image2  {
     -fx-background-radius: 5pt;
     -fx-background-color: whitesmoke;
     -fx-padding: 10pt;
