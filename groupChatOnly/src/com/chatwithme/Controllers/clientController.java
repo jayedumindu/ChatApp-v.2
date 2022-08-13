@@ -50,10 +50,10 @@ public class clientController {
     // data handling
     byte[] payload;
     byte[] header;
+    byte[] sender;
+    byte[] frame;
 
     int mouseCounter = 0;
-
-
 
     public void initialize() throws IOException {
 
@@ -63,9 +63,13 @@ public class clientController {
             stage.setOnCloseRequest(e -> {
                 listener.stop();
             });
+            try {
+                Connect();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
 
-        Connect();
 
     }
 
@@ -74,17 +78,17 @@ public class clientController {
 
         localPort = client.getLocalPort();
         localOutputStream = serverController.clients.get(localPort);
-
+        sender = ByteBuffer.allocate(4).putInt(localPort).array();
         Timer timer = new Timer();
         fileChooser = new FileChooser();
 
         // TODO : open up a listener for server
-        try {
-            listener = new ListenerThread(new DataInputStream(client.getInputStream()),msgBox,timer);
-            timer.schedule(listener,0,1000);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                try {
+                    listener = new ListenerThread(new DataInputStream(client.getInputStream()),msgBox,timer,clientName);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                timer.schedule(listener,0,1000);
     }
 
     public boolean sendMsg(String clientName) throws IOException, InterruptedException {
@@ -97,7 +101,8 @@ public class clientController {
             int len = payload.length;
 
             header = ByteBuffer.allocate(4).putInt(len).array();
-            byte[] frame = ArrayUtils.addAll(header,payload);
+            frame = ArrayUtils.addAll(header,sender);
+            frame = ArrayUtils.addAll(frame,payload);
 
             client.getOut().write(0);
             client.getOut().write(frame);
@@ -130,10 +135,17 @@ public class clientController {
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             ImageIO.write(finalImage, res[1], bout);
 
+            byte[] temp_payload = clientName.getBytes(StandardCharsets.UTF_16);
+            byte[] temp_header = ByteBuffer.allocate(4).putInt(temp_payload.length).array();
+
             payload = bout.toByteArray();
             header = ByteBuffer.allocate(4).putInt(payload.length).array();
 
-            byte[] frame = ArrayUtils.addAll(header,payload);
+            frame = ArrayUtils.addAll(temp_header,header);
+
+            frame = ArrayUtils.addAll(frame,sender);
+            frame = ArrayUtils.addAll(frame,temp_payload);
+            frame = ArrayUtils.addAll(frame,payload);
 
             client.getOut().write(-1);
             client.getOut().write(frame);

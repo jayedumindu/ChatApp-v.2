@@ -44,6 +44,7 @@ public class serverController {
                     Timer timer = new Timer();
                     timer.schedule(new Flusher(new DataInputStream(localSocket.getInputStream()),timer),0,2000);
                     clients.put(localSocket.getPort(), new DataOutputStream(localSocket.getOutputStream()));
+                    System.out.println(clients.keySet());
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
