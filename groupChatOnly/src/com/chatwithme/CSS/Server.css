@@ -9,7 +9,7 @@
     -fx-opacity: 0.6;
 }
 
-.label-bright {
+.label-bright, .name-field {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: white;
@@ -23,3 +23,21 @@
     -fx-opacity: 1;
 }
 
+.name-field {
+    -fx-prompt-text-fill: white;
+}
+
+.pane {
+    -fx-background-color: #5181b8;
+    -fx-background-radius: 5pt;
+    -fx-opacity: 0.9;
+}
+
+#start-btn {
+    -fx-opacity: 0.5;
+}
+
+#start-btn:hover {
+    -fx-opacity: 1;
+    -fx-cursor: hand;
+}

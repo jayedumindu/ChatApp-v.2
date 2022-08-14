@@ -12,13 +12,13 @@
    <children>
       <Pane layoutX="-1.0" layoutY="585.0" prefHeight="61.0" prefWidth="565.0">
          <children>
-            <ImageView fx:id="sendBtn" fitHeight="30.0" fitWidth="30.0" layoutX="521.0" layoutY="14.0" onMouseReleased="#sendOnMousePressed" preserveRatio="true" styleClass="custom_btn">
+            <ImageView  fitHeight="30.0" fitWidth="30.0" layoutX="521.0" layoutY="14.0" onMouseReleased="#sendOnMousePressed" preserveRatio="true" styleClass="custom_btn">
                <image>
                   <Image url="@../CSS/img/send.png" />
                </image>
             </ImageView>
             <JFXTextField fx:id="msgField" focusColor="#ffffff00" layoutX="59.0" layoutY="4.0" onKeyReleased="#sendOnEnter" prefHeight="51.0" prefWidth="398.0" unFocusColor="#ffffff00" />
-            <ImageView fx:id="uploadBtn" fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="14.0" onMouseReleased="#uploadPhoto" preserveRatio="true" styleClass="custom_btn">
+            <ImageView  fitHeight="30.0" fitWidth="30.0" layoutX="14.0" layoutY="14.0" onMouseReleased="#uploadPhoto" preserveRatio="true" styleClass="custom_btn">
                <image>
                   <Image url="@../CSS/img/attach.png" />
                </image>

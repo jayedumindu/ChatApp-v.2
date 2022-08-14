@@ -4,6 +4,7 @@ import com.chatwithme.Controllers.serverController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -20,10 +21,11 @@ public class AppInitializer extends Application {
         FXMLLoader loader = new FXMLLoader(this.getClass().getClassLoader().getResource("com/chatwithme/FXML/server.fxml"));
         Scene server = new Scene(loader.load());
         primaryStage.setScene(server);
-        primaryStage.setTitle("Server App");
+        primaryStage.setTitle("chatwithme™");
         primaryStage.setResizable(false);
         primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
+        primaryStage.getIcons().add(new Image("/com/chatwithme/CSS/img/logo.png"));
         // passing data via the controller
         try {
             serverController controller = loader.getController();

@@ -31,7 +31,7 @@
 }
 
 .text-field {
-    -fx-font-family: 'OpenSansEmoji';
+    -fx-font-family: "Roboto Thin";
     -fx-text-fill: #e2e2e2;
     -fx-font-size: 24px;
 }
@@ -41,7 +41,7 @@
 
 .label {
     -fx-background-radius: 5pt;
-    -fx-font-family: 'OpenSansEmoji';
+    -fx-font-family: 'Roboto Light';
     -fx-font-size: 15px;
     -fx-background-color: whitesmoke;
     -fx-text-fill: #333333;
