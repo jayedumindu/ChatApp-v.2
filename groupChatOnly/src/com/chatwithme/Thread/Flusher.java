@@ -5,16 +5,12 @@ import com.chatwithme.Controllers.serverController;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.ByteBuffer;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Flusher extends TimerTask {
-
-    // TODO : listen for all incoming data and flush the traffic to each of the clients
 
     DataInputStream inputStream;
     Timer timer;
@@ -32,11 +28,7 @@ public class Flusher extends TimerTask {
 
                 stop();
 
-                if (inputStream.readByte()==0){
-                    flush((byte) 0);
-                }else {
-                    flush((byte) -1);
-                }
+                flush(inputStream.readByte());
 
                 resume();
 
@@ -51,7 +43,7 @@ public class Flusher extends TimerTask {
         byte[] header = new byte[4];
         byte[] temp_header = new byte[4];
         byte[] sender = new byte[4];
-
+        byte[] payload;
         byte[] frame;
 
         int pay_len;
@@ -60,17 +52,18 @@ public class Flusher extends TimerTask {
         if(b==-1){
             // read two headers, get the length
             inputStream.read(temp_header);
-            inputStream.read(header);
+            inputStream.read(header); // repeated
             ByteBuffer headerBuffer = ByteBuffer.wrap(header);
             ByteBuffer tempHeaderBuffer = ByteBuffer.wrap(temp_header);
             pay_len = headerBuffer.getInt() + tempHeaderBuffer.getInt();
+
             // read sender
-            inputStream.read(sender);
-            // collect payload
+            inputStream.read(sender); // repeated
+
             ByteBuffer senderBuffer = ByteBuffer.wrap(sender);
             sender_port = senderBuffer.getInt();
 
-            byte[] payload = new byte[pay_len];
+            payload = new byte[pay_len];
             inputStream.read(payload);
 
             frame = new byte[pay_len + 8];
@@ -88,7 +81,7 @@ public class Flusher extends TimerTask {
             ByteBuffer senderBuffer = ByteBuffer.wrap(sender);
             sender_port = senderBuffer.getInt();
 
-            byte[] payload = new byte[pay_len];
+            payload = new byte[pay_len];
             inputStream.read(payload);
 
             frame = new byte[pay_len + 4];

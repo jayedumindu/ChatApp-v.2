@@ -7,9 +7,10 @@ import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -21,7 +22,10 @@ import org.apache.commons.lang.ArrayUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Timer;
@@ -36,20 +40,15 @@ public class clientController {
     public AnchorPane mainPane;
     public Pane emojiContainer;
 
-    // TODO : hv to encapsulate client
     Client client;
     String clientName;
     ListenerThread listener;
     Stage stage;
 
-    // meta-data
     int localPort;
-    DataOutputStream localOutputStream;
 
-    // file handling
     FileChooser fileChooser;
 
-    // data handling
     byte[] payload;
     byte[] header;
     byte[] sender;
@@ -79,14 +78,12 @@ public class clientController {
         client = new Client(clientName,"localhost",8080);
 
         localPort = client.getLocalPort();
-        localOutputStream = serverController.clients.get(localPort);
         sender = ByteBuffer.allocate(4).putInt(localPort).array();
         Timer timer = new Timer();
         fileChooser = new FileChooser();
 
-        // TODO : open up a listener for server
                 try {
-                    listener = new ListenerThread(new DataInputStream(client.getInputStream()),msgBox,timer,clientName);
+                    listener = new ListenerThread(new DataInputStream(client.getInputStream()),msgBox,timer);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -95,11 +92,10 @@ public class clientController {
 
     public boolean sendMsg(String clientName) throws IOException, InterruptedException {
 
-        // TODO : bypass all the empty spaces after and before
         if (!msgField.getText().trim().isEmpty()){
 
             String msg = clientName + " :\n" + msgField.getText();
-            payload = msg.getBytes(StandardCharsets.UTF_16);
+            payload = msg.getBytes(StandardCharsets.UTF_8);
             int len = payload.length;
 
             header = ByteBuffer.allocate(4).putInt(len).array();
@@ -121,7 +117,6 @@ public class clientController {
             return true;
         } else return false;
 
-
     }
 
 
@@ -139,13 +134,19 @@ public class clientController {
         if (selectedFile!=null) {
 
             String[] res = selectedFile.getName().split("\\.");
+            BufferedImage finalImage;
 
-            BufferedImage finalImage = ImageIO.read(selectedFile);
+            try {
+                finalImage = ImageIO.read(selectedFile);
+            } catch (Exception e) {
+                new Alert(Alert.AlertType.NONE,"Please select a file-type associated with images! try again", ButtonType.CLOSE).showAndWait();
+                return;
+            }
 
             ByteArrayOutputStream bout = new ByteArrayOutputStream();
             ImageIO.write(finalImage, res[1], bout);
 
-            byte[] temp_payload = clientName.getBytes(StandardCharsets.UTF_16);
+            byte[] temp_payload = clientName.getBytes(StandardCharsets.UTF_8);
             byte[] temp_header = ByteBuffer.allocate(4).putInt(temp_payload.length).array();
 
             payload = bout.toByteArray();
@@ -161,15 +162,13 @@ public class clientController {
             client.getOut().write(frame);
             client.getOut().flush();
 
-            Image image = SwingFXUtils.toFXImage(finalImage,null);
-
             HBox box = new HBox();
 
             GridPane pane  = new GridPane();
             pane.getStyleClass().add("custom-image2");
             pane.setStyle("-fx-background-color: #5181b8;");
 
-            ImageView view = new ImageView(image);
+            ImageView view = new ImageView(SwingFXUtils.toFXImage(finalImage,null));
             view.setFitHeight(250);
             view.setFitWidth(250);
             view.setSmooth(true);

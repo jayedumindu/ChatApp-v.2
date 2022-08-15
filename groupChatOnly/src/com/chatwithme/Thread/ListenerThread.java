@@ -23,13 +23,11 @@ public class ListenerThread extends TimerTask {
     DataInputStream in;
     VBox msgArea;
     Timer timer;
-    String client;
 
-    public ListenerThread(DataInputStream inputStream,VBox msgArea,Timer timer,String client){
+    public ListenerThread(DataInputStream inputStream,VBox msgArea,Timer timer){
         in = inputStream;
         this.msgArea = msgArea;
         this.timer = timer;
-        this.client = client;
     }
 
     @Override
@@ -50,7 +48,7 @@ public class ListenerThread extends TimerTask {
 
                         byte[] payload = new byte[len];
                         in.read(payload);
-                        String msg = new String(payload, StandardCharsets.UTF_16);
+                        String msg = new String(payload, StandardCharsets.UTF_8);
                         Label msgLbl = new Label(msg);
                         Platform.runLater(() -> {
                             msgArea.getChildren().add(msgLbl);
@@ -82,11 +80,11 @@ public class ListenerThread extends TimerTask {
 
                         GridPane imagePane = new GridPane();
                         ImageView view = new ImageView(image);
-                        Label sender = new Label(new String(sender_payload,StandardCharsets.UTF_16).concat(" :"));
+                        Label sender = new Label(new String(sender_payload,StandardCharsets.UTF_8).concat(" :"));
 
                         sender.getStyleClass().add("custom-label");
                         imagePane.getStyleClass().add("custom-image1");
-                        imagePane.setMaxWidth(300);
+                        imagePane.setMaxWidth(250);
                         imagePane.add(view,0,1);
                         imagePane.add(sender,0,0);
 
@@ -111,7 +109,7 @@ public class ListenerThread extends TimerTask {
 
     private void resume() {
         Timer timer = new Timer();
-        timer.schedule(new ListenerThread(in,msgArea,timer,client),0,1000);
+        timer.schedule(new ListenerThread(in,msgArea,timer),0,1000);
     }
 
     public void stop() {

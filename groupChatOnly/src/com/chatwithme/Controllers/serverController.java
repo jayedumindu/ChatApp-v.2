@@ -4,7 +4,6 @@ import com.chatwithme.Thread.Flusher;
 import com.chatwithme.util.Server;
 import com.jfoenix.controls.JFXTextField;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

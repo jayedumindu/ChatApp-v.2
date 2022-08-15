@@ -26,7 +26,6 @@ public class AppInitializer extends Application {
         primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
         primaryStage.getIcons().add(new Image("/com/chatwithme/CSS/img/logo.png"));
-        // passing data via the controller
         try {
             serverController controller = loader.getController();
             controller.initData(primaryStage);
