@@ -3,6 +3,8 @@ package com.chatwithme.Controllers;
 import com.chatwithme.Thread.ListenerThread;
 import com.chatwithme.util.Client;
 import com.jfoenix.controls.JFXTextField;
+import com.pavlobu.emojitextflow.EmojiTextFlow;
+import com.pavlobu.emojitextflow.EmojiTextFlowParameters;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
@@ -16,6 +18,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.apache.commons.lang.ArrayUtils;
@@ -56,6 +60,13 @@ public class clientController {
 
     int mouseCounter = 0;
 
+    EmojiTextFlowParameters emojiTextFlowParameters;
+    {
+        emojiTextFlowParameters = new EmojiTextFlowParameters();
+        emojiTextFlowParameters.setEmojiScaleFactor(3);
+        emojiTextFlowParameters.setFont(Font.font("Roboto Light", FontPosture.REGULAR, 18));
+    }
+
     public void initialize() throws IOException {
 
         Platform.runLater(() -> {
@@ -94,8 +105,8 @@ public class clientController {
 
         if (!msgField.getText().trim().isEmpty()){
 
-            String msg = clientName + " :\n" + msgField.getText();
-            payload = msg.getBytes(StandardCharsets.UTF_8);
+            String msgF = clientName + " :\n" + msgField.getText();
+            payload = msgF.getBytes(StandardCharsets.UTF_8);
             int len = payload.length;
 
             header = ByteBuffer.allocate(4).putInt(len).array();
@@ -117,6 +128,29 @@ public class clientController {
             return true;
         } else return false;
 
+    }
+
+    private void sendEmoji(String code) throws IOException {
+        String msgF = clientName + " :\n" + code;
+        payload = msgF.getBytes(StandardCharsets.UTF_8);
+        int len = payload.length;
+
+        header = ByteBuffer.allocate(4).putInt(len).array();
+        frame = ArrayUtils.addAll(header,sender);
+        frame = ArrayUtils.addAll(frame,payload);
+
+        client.getOut().write(1);
+        client.getOut().write(frame);
+        client.getOut().flush();
+
+        EmojiTextFlow dialogContainer = new EmojiTextFlow(emojiTextFlowParameters);
+        dialogContainer.getStyleClass().add("label");
+        dialogContainer.setStyle("-fx-background-color: #5181b8;");
+        dialogContainer.parseAndAppend(code);
+        HBox box = new HBox();
+        box.getChildren().add(dialogContainer);
+        box.setAlignment(Pos.BASELINE_RIGHT);
+        msgBox.getChildren().add(box);
     }
 
 
@@ -205,22 +239,22 @@ public class clientController {
         emojiContainer.setVisible(mouseCounter % 2 == 1);
     }
 
-    public void copyEmojiToMsg(MouseEvent mouseEvent) {
+    public void copyEmojiToMsg(MouseEvent mouseEvent) throws IOException {
         ImageView emoji = (ImageView) mouseEvent.getSource();
         String id = emoji.getId();
         switch (id) {
-            case "smile" : msgField.appendText("\uD83D\uDE00"); break;
-            case "alien" : msgField.appendText("\uD83D\uDC7D"); break;
-            case "hand" : msgField.appendText("\u270B"); break;
-            case "smInPain" : msgField.appendText("\ud83d\ude08"); break;
-            case "heart" : msgField.appendText("\uD83D\uDC9D"); break;
-            case "party" : msgField.appendText("\uD83E\uDD73"); break;
-            case "angry" : msgField.appendText("\uD83D\uDE20"); break;
-            case "hot" : msgField.appendText("\uD83E\uDD75"); break;
-            case "neutral" : msgField.appendText("\uD83D\uDE10"); break;
-            case "poop" : msgField.appendText("\uD83D\uDCA9"); break;
-            case "broken" : msgField.appendText("\uD83D\uDC94"); break;
-            case "love" : msgField.appendText("\uD83D\uDE0D"); break;
+            case "smile" : sendEmoji(":smiley:"); break;
+            case "alien" : sendEmoji(":alien:"); break;
+            case "hand" : sendEmoji(":raising_hand:"); break;
+            case "smInPain" : sendEmoji(":joy:"); break;
+            case "heart" : sendEmoji(":gift_heart:"); break;
+            case "party" : sendEmoji(":tada:"); break;
+            case "angry" : sendEmoji(":angry:"); break;
+            case "hot" : sendEmoji(":cold_sweat:"); break;
+            case "neutral" : sendEmoji(":neutral_face:"); break;
+            case "poop" : sendEmoji(":poop:"); break;
+            case "broken" : sendEmoji(":broken_heart:"); break;
+            case "love" : sendEmoji(":heart_eyes:"); break;
         }
     }
 }

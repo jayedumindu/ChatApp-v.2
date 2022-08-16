@@ -1,12 +1,18 @@
 package com.chatwithme.Thread;
 
+import com.pavlobu.emojitextflow.EmojiTextFlow;
+import com.pavlobu.emojitextflow.EmojiTextFlowParameters;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -24,6 +30,13 @@ public class ListenerThread extends TimerTask {
     VBox msgArea;
     Timer timer;
 
+    EmojiTextFlowParameters emojiTextFlowParameters;
+    {
+        emojiTextFlowParameters = new EmojiTextFlowParameters();
+        emojiTextFlowParameters.setEmojiScaleFactor(3);
+        emojiTextFlowParameters.setFont(Font.font("Roboto Light", FontPosture.REGULAR, 18));
+    }
+
     public ListenerThread(DataInputStream inputStream,VBox msgArea,Timer timer){
         in = inputStream;
         this.msgArea = msgArea;
@@ -38,7 +51,9 @@ public class ListenerThread extends TimerTask {
 
                     stop();
 
-                    if (in.readByte()==0){
+                    byte identifier = in.readByte();
+
+                    if (identifier==0){
 
                         byte[] header = new byte[4];
                         in.read(header);
@@ -54,7 +69,28 @@ public class ListenerThread extends TimerTask {
                             msgArea.getChildren().add(msgLbl);
                         });
 
-                    }else {
+                    }
+                    else  if (identifier==1) {
+                        byte[] header = new byte[4];
+                        in.read(header);
+
+                        ByteBuffer buffer = ByteBuffer.wrap(header);
+                        int len = buffer.getInt();
+
+                        byte[] payload = new byte[len];
+                        in.read(payload);
+                        String msg = new String(payload, StandardCharsets.UTF_8);
+                        EmojiTextFlow dialogContainer = new EmojiTextFlow(emojiTextFlowParameters);
+                        dialogContainer.getStyleClass().add("label");
+                        dialogContainer.parseAndAppend(msg);
+                        HBox box = new HBox();
+                        box.getChildren().add(dialogContainer);
+                        box.setAlignment(Pos.BASELINE_LEFT);
+                        Platform.runLater(() -> {
+                            msgArea.getChildren().add(box);
+                        });
+                    }
+                    else {
 
                         byte[] header = new byte[4];
                         byte[] temp_header = new byte[4];
